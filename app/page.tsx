@@ -71,6 +71,19 @@ export default function Page() {
     console.log("memos:", memos);
   }, [memos]);
 
+  const deleteMemo = useCallback(async (id: string) => {
+    try {
+      const res = await fetch(`/api/memos/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.error ?? "Failed to delete");
+      }
+      setMemos((prev) => prev.filter((m) => m.id !== id));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to delete memo");
+    }
+  }, []);
+
   const submit = useCallback(async () => {
     const content = input.trim();
     if (!content || saving) return;
@@ -126,7 +139,18 @@ export default function Page() {
           memos.map((m) => (
             <article key={m.id} className="memo-item">
               <p className="content">{m.content}</p>
-              <p className="meta">{formatDateTime(m.createdAt)}</p>
+              <div className="memo-item-footer">
+                <p className="meta">{formatDateTime(m.createdAt)}</p>
+                <button
+                  type="button"
+                  className="memo-delete-btn"
+                  onClick={() => deleteMemo(m.id)}
+                  title="삭제"
+                  aria-label="메모 삭제"
+                >
+                  삭제
+                </button>
+              </div>
             </article>
           ))}
       </main>

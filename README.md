@@ -2,6 +2,10 @@
 
 ChatGPT처럼 메모를 입력하면 **현재 날짜·시간**과 함께 DB에 저장되고, 다시 열어도 목록에서 조회할 수 있는 프로젝트입니다.
 
+## 미리보기
+
+![메모 앱 화면](memoViews.png)
+
 ## 기술 스택
 
 - Next.js (App Router), TypeScript
